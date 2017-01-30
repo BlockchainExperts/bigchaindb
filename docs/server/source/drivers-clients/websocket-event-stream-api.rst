@@ -82,6 +82,10 @@ All messages sent in a stream are in the JSON format.
     also provide the ability to filter the stream for specific qualities, such
     as a specific ``output``'s ``public_key``.
 
+    If you have specific use cases that you think would fit as part of this
+    API, feel free to reach out via `gitter <https://gitter.im/bigchaindb/bigchaindb>`_
+    or `email <mailto:support@bigchaindb.com>`_.
+
 Valid Transactions
 ~~~~~~~~~~~~~~~~~~
 
