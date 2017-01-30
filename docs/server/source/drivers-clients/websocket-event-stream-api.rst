@@ -11,6 +11,13 @@ Connecting to a Events Stream from your application enables a BigchainDB node
 to notify you as events are processed, such as new `validated transactions <#valid-transactions>`_.
 
 
+Demoing the API
+---------------
+
+You may be interested in demoing the Events Stream API with the `WebSocket echo test <http://websocket.org/echo.html>`_
+to familiarize yourself before attempting an integration.
+
+
 Determining Support for the Events Stream API
 ---------------------------------------------
 
@@ -96,13 +103,3 @@ Example message::
     Transactions in BigchainDB are validated in batches ("blocks") and may,
     therefore, be streamed in batches. Each block can contain up to a 1000
     transactions, which may all be sent at once without any required ordering.
-
-
-Tips and Tricks
----------------
-
-Demoing the API
-~~~~~~~~~~~~~~~
-
-You may be interested in demoing the Events Stream API with the `WebSocket echo test <http://websocket.org/echo.html>`_
-to familiarize yourself before attempting an integration.
