@@ -1,6 +1,9 @@
 The WebSockets Events Stream API
 ================================
 
+.. important::
+    This is currently scheduled to be implemented in BigchainDB Server 0.10.
+
 BigchainDB provides real-time event streams over the WebSockets protocol with
 the Events Stream API.
 
