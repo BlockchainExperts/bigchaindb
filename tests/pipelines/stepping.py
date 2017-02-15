@@ -16,6 +16,7 @@ import bigchaindb.core
 from bigchaindb.backend.changefeed import ChangeFeed
 import bigchaindb.pipelines.block
 import bigchaindb.pipelines.stale
+import bigchaindb.pipelines.vote
 
 
 class MultipipesStepper:
@@ -56,8 +57,8 @@ class MultipipesStepper:
         if next:
             next_name = '%s_%s' % (prefix, next.name)
 
-        def inner(*args):
-            out = f(*args)
+        def inner(*args, **kwargs):
+            out = f(*args, **kwargs)
             if out is not None and next:
                 self.enqueue(next_name, out)
 
@@ -67,8 +68,12 @@ class MultipipesStepper:
     def enqueue(self, name, item):
         queue = self.queues.setdefault(name, [])
         if isinstance(item, types.GeneratorType):
-            queue.extend(list(item))
+            items = list(item)
         else:
+            items = [item]
+        for item in items:
+            if type(item) != tuple:
+                item = (item,)
             queue.append(item)
 
     def step(self, name, **kwargs):
@@ -80,10 +85,11 @@ class MultipipesStepper:
             queue = self.queues.get(name, [])
             if not queue:
                 raise Empty(name)
-            task(queue.pop(0), **kwargs)
+            task(*queue.pop(0), **kwargs)
         logging.debug('Stepped %s', name)
 
-    def get_counts(self):
+    @property
+    def counts(self):
         counts = {}
         for name in self.queues:
             n = len(self.queues[name])
@@ -134,5 +140,9 @@ def create_stepper():
         pipeline = bigchaindb.pipelines.stale.start(
             timeout=0, backlog_reassign_delay=0)
         update_stepper(stepper, 'stale', pipeline)
+
+    with patch('bigchaindb.pipelines.vote.Pipeline.start'):
+        pipeline = bigchaindb.pipelines.vote.start()
+        update_stepper(stepper, 'vote', pipeline)
 
     return stepper
